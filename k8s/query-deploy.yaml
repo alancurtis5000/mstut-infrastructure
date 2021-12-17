@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: alancurtis31/query:latest
+
+--- # three dashes allow you to make multiple types inside one file ^kind: deployment / kind Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-service
+spec:
+  selector:
+    app: query
+  type: ClusterIP # defaults to ClusterIP if type not provided
+  ports:
+    - name: query # "-" in yaml file mean array.
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moderation
+  template:
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: alancurtis31/moderation:latest
+
+--- # three dashes allow you to make multiple types inside one file ^kind: deployment / kind Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-service
+spec:
+  selector:
+    app: moderation
+  type: ClusterIP # defaults to ClusterIP if type not provided
+  ports:
+    - name: moderation # "-" in yaml file mean array.
+      protocol: TCP
+      port: 4003
+      targetPort: 4003
