@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-bus
+  template:
+    metadata:
+      labels:
+        app: event-bus
+    spec:
+      containers:
+        - name: event-bus
+          image: alancurtis31/event-bus:latest
+--- # three dashes allow you to make multiple types inside one file ^kind: deployment / kind Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-service
+spec:
+  selector:
+    app: event-bus
+  type: ClusterIP # defaults to ClusterIP if type not provided
+  ports:
+    - name: event-bus # "-" in yaml file mean array.
+      protocol: TCP
+      port: 4005
+      targetPort: 4005

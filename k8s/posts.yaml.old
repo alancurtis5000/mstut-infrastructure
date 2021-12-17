@@ -1,0 +1,9 @@
+# example for building a pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: posts
+spec:
+  containers:
+    - name: posts
+      image: alancurtis31/posts:0.0.1

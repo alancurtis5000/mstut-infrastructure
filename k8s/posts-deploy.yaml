@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: alancurtis31/posts:latest
+
+--- # three dashes allow you to make multiple types inside one file ^kind: deployment / kind Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-service # this needs to be unique don't want it to match other service
+spec:
+  selector:
+    app: posts
+  type: ClusterIP # defaults to ClusterIP if type not provided
+  ports:
+    - name: posts # "-" in yaml file mean array.
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
