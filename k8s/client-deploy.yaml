@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: alancurtis31/client:latest
+
+--- # three dashes allow you to make multiple types inside one file ^kind: deployment / kind Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-service
+spec:
+  selector:
+    app: client
+  type: ClusterIP # defaults to ClusterIP if type not provided
+  ports:
+    - name: client # "-" in yaml file mean array.
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
