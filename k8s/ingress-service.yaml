@@ -8,9 +8,9 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true' # allows us to use regex in paths
 spec:
   rules:
-    - host: posts.com
+    - host: posts.com # main route of domain of app.
       http:
-        paths:
+        paths: # acts like a switch statement finds the first true.
           - path: /posts/create # anything coming in with path posts, send to posts microservice.
             pathType: Prefix
             backend:
